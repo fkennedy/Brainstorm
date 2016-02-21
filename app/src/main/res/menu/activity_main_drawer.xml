@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_groupchats"
+            android:icon="@drawable/ic_chat"
+            android:title="Group Chats" />
+        <item
+            android:id="@+id/nav_friendslist"
+            android:icon="@drawable/ic_group"
+            android:title="Friend's List" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Settings" />
+    </group>
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_person"
+            android:title="Profile" />
+    </group>
+
+
+</menu>
