@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
+
+
         // Initial Fragment to display
         MainActivityFragment fragment = new MainActivityFragment();
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
