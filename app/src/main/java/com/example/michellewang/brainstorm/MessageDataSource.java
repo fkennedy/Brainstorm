@@ -14,7 +14,7 @@ import java.util.HashMap;
  * Created by Victor on 2/21/2016.
  */
 public class MessageDataSource {
-    private static final Firebase sRef = new Firebase("YOUR FIREBASE URL");
+    private static final Firebase sRef = new Firebase("https://csm117-brainstorm.firebaseio.com/");
     private static SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyyMMddmmss");
     private static final String TAG = "MessageDataSource";
     private static final String COLUMN_TEXT = "text";
@@ -25,8 +25,8 @@ public class MessageDataSource {
         Date date = message.getDate();
         String key = sDateFormat.format(date);
         HashMap<String, String> msg = new HashMap<>();
-        msg.put(COLUMN_TEXT, message.getText());
-        msg.put(COLUMN_SENDER,"Ajay");
+        msg.put(COLUMN_TEXT, message.getmText());
+        msg.put(COLUMN_SENDER,"Victor");
         sRef.child(convoId).child(key).setValue(msg);
     }
 
@@ -50,10 +50,10 @@ public class MessageDataSource {
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             HashMap<String,String> msg = (HashMap)dataSnapshot.getValue();
             Message message = new Message();
-            message.setSender(msg.get(COLUMN_SENDER));
-            message.setText(msg.get(COLUMN_TEXT));
+            message.setmSender(msg.get(COLUMN_SENDER));
+            message.setmText(msg.get(COLUMN_TEXT));
             try {
-                message.setDate(sDateFormat.parse(dataSnapshot.getKey()));
+                message.setmDate(sDateFormat.parse(dataSnapshot.getKey()));
             }catch (Exception e){
                 Log.d(TAG, "Couldn't parse date"+e);
             }

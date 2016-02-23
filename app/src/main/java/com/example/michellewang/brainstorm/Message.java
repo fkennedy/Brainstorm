@@ -17,23 +17,23 @@ public class Message {
         return mDate;
     }
 
-    public void setDate(Date date) {
-        mDate = date;
+    public void setmDate(Date mDate) {
+        this.mDate = mDate;
     }
 
-    public String getText() {
+    public String getmText() {
         return mText;
     }
 
-    public void setText(String text) {
-        mText = text;
+    public void setmText(String mText) {
+        this.mText = mText;
     }
 
-    public String getSender() {
+    public String getmSender() {
         return mSender;
     }
 
-    public void setSender(String sender) {
-        mSender = sender;
+    public void setmSender(String mSender) {
+        this.mSender = mSender;
     }
 }
