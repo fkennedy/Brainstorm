@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Brainstorm</string>
+    <string name="app_name">brainblast</string>
     <string name="menu1">Group Chats</string>
     <string name="menu2">Friend\'s List</string>
     <string name="menu3">Settings</string>
@@ -12,7 +12,7 @@
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
+    <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
