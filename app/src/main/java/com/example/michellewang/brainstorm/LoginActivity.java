@@ -35,6 +35,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +45,10 @@ import static android.Manifest.permission.READ_CONTACTS;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+
+    Firebase ref;
+    Map usersMap = new HashMap<String, String>();
+
     /**
      * Id to identity READ_CONTACTS permission request.
      */
@@ -71,20 +76,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         Firebase.setAndroidContext(this);
 
-        Firebase testLogin = new Firebase("https://csm117-brainstorm.firebaseio.com");
-        testLogin.addAuthStateListener(new Firebase.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(AuthData authData) {
-                if (authData != null) {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                }
-            }
-        });
-
+        ref = new Firebase("https://csm117-brainstorm.firebaseio.com/");
+        //usersMap.put("test1", "hi");
+        //ref.child("users").setValue(usersMap);
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -163,20 +159,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-    public class User {
-        private String email;
-
-        public User() {}
-
-        public User(String email) {
-            this.email = email;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-    }
-
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
@@ -216,8 +198,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cancel = true;
         }
 
-        Firebase ref = new Firebase("https://csm117-brainstorm.firebaseio.com/");
-
         // Create user Accounts
         ref.createUser(email, password, new Firebase.ValueResultHandler<Map<String, Object>>() {
             @Override
@@ -255,8 +235,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask.execute((Void) null);
         }
 
-        User newUser = new User(email);
-        ref.child("users").setValue(newUser);
+        String username = email.substring(0, email.indexOf("@"));
+
+        ref.child("users").child(username).setValue(username);
+
+        //usersMap.put(email, username);
+        //ref.child("users").updateChildren(usersMap);
 
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
@@ -448,4 +432,3 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 }
-
