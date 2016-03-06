@@ -74,6 +74,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         Firebase.setAndroidContext(this);
 
+        Firebase testLogin = new Firebase("https://csm117-brainstorm.firebaseio.com");
+        testLogin.addAuthStateListener(new Firebase.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(AuthData authData) {
+                if (authData != null) {
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();

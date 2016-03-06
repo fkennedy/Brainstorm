@@ -1,6 +1,5 @@
 package com.example.michellewang.brainstorm;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -13,7 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 
 
@@ -28,7 +29,11 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Firebase.setAndroidContext(this);
+        AuthData authData = ref.getAuth();
+        if (authData == null) {
+            Toast.makeText(getApplicationContext(), "Not logged in",
+                    Toast.LENGTH_LONG).show();
+        }
 
         // Initial Fragment to display
         MainActivityFragment fragment = new MainActivityFragment();
@@ -85,9 +90,6 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
             ref.unauth();
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
-
         }
 
         return super.onOptionsItemSelected(item);
