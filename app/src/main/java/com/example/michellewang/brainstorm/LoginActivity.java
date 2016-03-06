@@ -95,8 +95,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View view) {
                 attemptLogin();
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
             }
         });
 
@@ -153,6 +151,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    public class User {
+        private String email;
+
+        public User() {}
+
+        public User(String email) {
+            this.email = email;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+    }
+
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
@@ -194,8 +206,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         Firebase ref = new Firebase("https://csm117-brainstorm.firebaseio.com/");
 
-        Firebase userRef = ref.child("users").child(email);
-
         // Create user Accounts
         ref.createUser(email, password, new Firebase.ValueResultHandler<Map<String, Object>>() {
             @Override
@@ -232,6 +242,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
         }
+
+        User newUser = new User(email);
+        ref.child("users").setValue(newUser);
+
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 
     private boolean isEmailValid(String email) {
