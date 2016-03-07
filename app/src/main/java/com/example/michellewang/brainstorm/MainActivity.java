@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -33,6 +32,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Bundle extras = getIntent().getExtras();
+        final String username = extras.getString("username");
+
         // Initial Fragment to display
         MainActivityFragment fragment = new MainActivityFragment();
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -46,8 +48,9 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "This button is to add new friends/groups(?)", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(MainActivity.this, Groups.class);
+                intent.putExtra("username",username);
+                startActivity(intent);
             }
         });
 
@@ -60,9 +63,8 @@ public class MainActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Bundle extras = getIntent().getExtras();
+
         String toDisplay = "Logged in as: ";
-        String username = extras.getString("username");
         toDisplay = toDisplay.concat(username);
         View navHeaderView = navigationView.getHeaderView(0);
         TextView textViewUsername = (TextView) navHeaderView.findViewById(R.id.textView_username);

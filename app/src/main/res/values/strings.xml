@@ -28,4 +28,12 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- From Jcheung & Victor's progress -->
+    <string name="action_settings">Settings</string>
+    <string name="topic_hint">  Enter a Topic..</string>
+    <string name="submit_button">SUBMIT</string>
+    <string name="spec_hint">Enter here All the Specs you want to add, should we make this a list instead????</string>
+    <string name="current_timer"></string>
+    <string name="timer_hint">Format 00:00:00</string>
 </resources>

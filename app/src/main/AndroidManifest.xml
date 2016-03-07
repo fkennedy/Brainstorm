@@ -38,6 +38,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Groups" />
+        <activity android:name=".Brainstorm_Session" />
+        <activity android:name=".New_Session" />
     </application>
 
 </manifest>
