@@ -159,6 +159,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    // Create a handler to handle the result of the authentication
+    Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
+        @Override
+        public void onAuthenticated(AuthData authData) {
+            // Authenticated successfully with payload authData
+        }
+        @Override
+        public void onAuthenticationError(FirebaseError firebaseError) {
+            // Authenticated failed with error firebaseError
+        }
+    };
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
@@ -238,6 +249,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         String username = email.substring(0, email.indexOf("@"));
 
         ref.child("users").child(username).setValue(username);
+        ref.authWithPassword(email, password, authResultHandler);
 
         //usersMap.put(email, username);
         //ref.child("users").updateChildren(usersMap);

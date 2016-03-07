@@ -18,8 +18,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.firebase.client.Firebase;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    Firebase ref = new Firebase("https://csm117-brainstorm.firebaseio.com/");
 
     NavigationView navigationView = null;
     Toolbar toolbar = null;
@@ -98,6 +102,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
+            ref.unauth();
             Intent logout = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(logout);
         }
