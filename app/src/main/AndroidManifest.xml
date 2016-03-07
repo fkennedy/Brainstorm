@@ -18,8 +18,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".DetailActivity"
             android:label="@string/app_name"
@@ -30,14 +29,16 @@
                 android:value="com.example.michellewang.brainstorm.MainActivity" />
         </activity>
         <activity
-            android:theme="@style/AppTheme.NoActionBar"
             android:name=".LoginActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                 <action android:name="android.intent.action.MAIN" />
-                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".AddActivity"></activity>
     </application>
 
 </manifest>
