@@ -255,6 +255,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         //ref.child("users").updateChildren(usersMap);
 
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.putExtra("username",username);
         startActivity(intent);
     }
 

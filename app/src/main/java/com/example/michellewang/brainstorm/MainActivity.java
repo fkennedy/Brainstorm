@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -60,6 +59,14 @@ public class MainActivity extends AppCompatActivity
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Bundle extras = getIntent().getExtras();
+        String toDisplay = "Logged in as: ";
+        String username = extras.getString("username");
+        toDisplay = toDisplay.concat(username);
+        View navHeaderView = navigationView.getHeaderView(0);
+        TextView textViewUsername = (TextView) navHeaderView.findViewById(R.id.textView_username);
+        textViewUsername.setText(toDisplay);
 
         final ActionBar abar = getSupportActionBar();
         View viewActionBar = getLayoutInflater().inflate(R.layout.app_bar_main_layout, null);
