@@ -15,11 +15,7 @@
         android:focusable="false"
         android:longClickable="false"
         android:textStyle="bold"
-<<<<<<< HEAD
         android:textSize="26dp"
-=======
-        android:textSize="32dp"
->>>>>>> 33dae453882cd8422f60be938e97e1dc4b39a6bf
         android:textColor="#FFFFFF" />
 
 </LinearLayout>
