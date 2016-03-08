@@ -4,12 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.firebase.client.DataSnapshot;
@@ -31,22 +29,18 @@ import java.util.Map;
  */
 public class Groups extends AppCompatActivity {
     EditText group_text, group_name;
-    ListView member_list, UserList;
+    LinearLayout member_list;
     SearchView member_search;
-    ArrayList<String> CurrentUsers = new ArrayList<>();
-    ArrayList<Integer> Checked = new ArrayList<>();
-    ArrayAdapter<String> DisplayUsers_toAdd;
-    Map<String, Boolean> userMap = new HashMap<String, Boolean>();
+    ArrayList<String> AllUsers = new ArrayList<>();
+    Map<String, Boolean> userMap = new HashMap<>();
     CheckBox[] cbArray = new CheckBox[20];
     int cbArray_size = 0;
 
     public final static String member_key = "com.example.michellewang.brainstorm.member_key";
     public final static String group_key = "com.example.michellewang.brainstorm.group_key";
     public final static String groupName_key = "com.example.michellewang.brainstorm.group_key";
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+
+    private String username = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,15 +49,19 @@ public class Groups extends AppCompatActivity {
         Firebase.setAndroidContext(this);
         final Firebase ref = new Firebase("https://csm117-brainstorm.firebaseio.com/");
         group_name = (EditText) findViewById(R.id.group_text);
-        member_list=(ListView) findViewById(R.id.UsersList);
+        member_list=(LinearLayout) findViewById(R.id.groupLayout);
         member_search=(SearchView) findViewById(R.id.member_search);
 
+        Bundle extras = getIntent().getExtras();
+        username = extras.getString("username");
 
-        UserList = (ListView) findViewById(R.id.UsersList);
         final Firebase UsernameList = ref.child("users");
         UsernameList.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren())
+                    AllUsers.add(child.getValue().toString());
+
                 userMap = (HashMap<String, Boolean>)dataSnapshot.getValue();
                 createUserCB();
             }
@@ -79,8 +77,6 @@ public class Groups extends AppCompatActivity {
         createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                System.out.println("Checked items: " +UserList.getCheckedItemCount());
                 String groupName = group_name.getText().toString();
                 if (groupName.length() == 0) {
                     group_name.setError("invalid group name");
@@ -95,7 +91,7 @@ public class Groups extends AppCompatActivity {
                         {
                             selectedUserMap.put(cbArray[i].getText().toString(), Boolean.TRUE);
                             UserRef = ref.child("users").child(cbArray[i].getText().toString());
-                            UserRef.child(groupName).setValue("none"); //set group to true for that user
+                            UserRef.child(groupName).setValue("none");
                         }
                     }
                     //PUSH USER WHO MADE GROUP INTO USERMAP
@@ -104,18 +100,17 @@ public class Groups extends AppCompatActivity {
 
                     Intent newGroup = new Intent(Groups.this, New_Session.class);
                     newGroup.putExtra(groupName_key, groupName);
+                    newGroup.putExtra("username", username);
                     startActivity(newGroup);
                 }
             }
         });
-
     }
 
     public void createUserCB()
     {
         LinearLayout groupLayout = (LinearLayout)findViewById(R.id.groupLayout);
         groupLayout.setOrientation(LinearLayout.VERTICAL);
-        ListView usersListView = (ListView)findViewById(R.id.UsersList);
         for (HashMap.Entry<String, Boolean> entry : userMap.entrySet())
         {
             cbArray[cbArray_size] = new CheckBox(this);
@@ -125,9 +120,13 @@ public class Groups extends AppCompatActivity {
             tempCB.setId(cbID);
             groupLayout.addView(tempCB);
             cbArray_size++;
-
         }
-
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent back = new Intent(Groups.this, MainActivity.class);
+        back.putExtra("username",username);
+        startActivity(back);
+    }
 }

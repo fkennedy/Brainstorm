@@ -22,6 +22,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="TOPIC"
+            android:textStyle="bold"
             android:id="@+id/header_topic"
             android:gravity="center" />
 
@@ -30,6 +31,7 @@
             android:paddingTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/other_grey"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_below="@id/header_topic"
             android:text="SPECS"
@@ -46,8 +48,7 @@
             android:id="@+id/timer_text_view"
             android:layout_below="@+id/header_spec"
             android:gravity="center"
-            android:background="@android:color/darker_gray"
-            android:textColor="@android:color/white"/>
+            android:textColor="@color/other_grey"/>
     </LinearLayout>
 
 
@@ -73,8 +74,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:id="@+id/addIdea_EditText"
+            android:textColor="@color/colorAccent"
             android:hint="Enter new idea...."
             android:singleLine="true"/>
+
         <Button
             android:background="@drawable/rounded_button"
             android:textColor="@android:color/white"
@@ -87,5 +90,5 @@
             android:imeOptions="actionDone"/>
     </LinearLayout>
 
-    </LinearLayout>
+</LinearLayout>
 

@@ -22,12 +22,7 @@
         <activity
             android:name=".DetailActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.michellewang.brainstorm.MainActivity" />
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".LoginActivity"
             android:label="@string/app_name"
@@ -41,6 +36,15 @@
         <activity android:name=".Groups" />
         <activity android:name=".Brainstorm_Session" />
         <activity android:name=".New_Session" />
+        <activity android:name=".MyActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".DisplayMessageActivity"
+            android:parentActivityName=".MyActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.michellewang.brainstorm.MyActivity" />
+        </activity>
     </application>
 
 </manifest>
