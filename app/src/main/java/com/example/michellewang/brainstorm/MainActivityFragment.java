@@ -36,8 +36,10 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        MainActivity activity = (MainActivity) getActivity();
-        final String username = activity.getUsername();
+//        MainActivity activity = (MainActivity) getActivity();
+//        final String username = activity.getUsername();
+        Intent intent = getActivity().getIntent();
+        final String username = intent.getStringExtra("username");
 
         Firebase ref = new Firebase("https://csm117-brainstorm.firebaseio.com/");
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -75,7 +77,7 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 String group = mGroupAdapter.getItem(position);
-                Intent intent = new Intent(getActivity(), New_Session.class);
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra(Intent.EXTRA_TEXT, group);
                 intent.putExtra("username", username);
                 intent.putExtra(groupName_key, group);

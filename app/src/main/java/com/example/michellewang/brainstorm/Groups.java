@@ -3,6 +3,7 @@ package com.example.michellewang.brainstorm;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -105,6 +106,20 @@ public class Groups extends AppCompatActivity {
                 }
             }
         });
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                Intent intent= new Intent(Groups.this, MainActivity.class);
+                intent.putExtra("username", username);
+                startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void createUserCB()
@@ -121,12 +136,5 @@ public class Groups extends AppCompatActivity {
             groupLayout.addView(tempCB);
             cbArray_size++;
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent back = new Intent(Groups.this, MainActivity.class);
-        back.putExtra("username",username);
-        startActivity(back);
     }
 }

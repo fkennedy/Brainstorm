@@ -44,11 +44,11 @@ public class New_Session extends AppCompatActivity {
                 spec_text = (EditText) findViewById(R.id.spec_text);
                 timer_text = (EditText) findViewById(R.id.timer_text);
 
-                String topic =  topic_text.getText().toString(); // do we wanna store this in firebase"
+                String topic = topic_text.getText().toString(); // do we wanna store this in firebase"
                 String timer = timer_text.getText().toString();
                 String spec = spec_text.getText().toString();
 
-                Intent submit = new Intent(New_Session.this,Brainstorm_Session.class);
+                Intent submit = new Intent(New_Session.this, Brainstorm_Session.class);
                 submit.putExtra(timer_key, timer);
                 submit.putExtra(topic_key, topic);
                 submit.putExtra(spec_key, spec);
