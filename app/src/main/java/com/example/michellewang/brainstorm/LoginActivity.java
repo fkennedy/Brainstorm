@@ -159,17 +159,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-    // Create a handler to handle the result of the authentication
-    Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
-        @Override
-        public void onAuthenticated(AuthData authData) {
-            // Authenticated successfully with payload authData
-        }
-        @Override
-        public void onAuthenticationError(FirebaseError firebaseError) {
-            // Authenticated failed with error firebaseError
-        }
-    };
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
@@ -218,7 +207,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             @Override
             public void onError(FirebaseError firebaseError) {
-                // there was an error
             }
         });
 
@@ -230,9 +218,27 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             @Override
             public void onAuthenticationError(FirebaseError firebaseError) {
+                System.out.println("onAuthenticationError password");
                 // there was an error
             }
         });
+
+        // Create a handler to handle the result of the authentication
+        Firebase.AuthResultHandler authResultHandler = new Firebase.AuthResultHandler() {
+            @Override
+            public void onAuthenticated(AuthData authData) {
+                // Authenticated successfully with payload authData
+            }
+            @Override
+            public void onAuthenticationError(FirebaseError firebaseError) {
+                System.out.println("onAuthenticationError");
+            }
+        };
+
+        String username = email.substring(0, email.indexOf("@"));
+
+        ref.child("users").child(username).setValue(username);
+        ref.authWithPassword(email, password, authResultHandler);
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -244,19 +250,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.putExtra("username",username);
+            startActivity(intent);
         }
-
-        String username = email.substring(0, email.indexOf("@"));
-
-        ref.child("users").child(username).setValue(username);
-        ref.authWithPassword(email, password, authResultHandler);
 
         //usersMap.put(email, username);
         //ref.child("users").updateChildren(usersMap);
 
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        intent.putExtra("username",username);
-        startActivity(intent);
+
     }
 
     private boolean isEmailValid(String email) {
