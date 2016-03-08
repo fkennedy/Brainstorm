@@ -10,9 +10,14 @@ import android.widget.ListView;
 import android.widget.AdapterView;
 import android.widget.Toast;
 import android.content.Intent;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 /**
@@ -21,6 +26,7 @@ import java.util.Arrays;
 public class MainActivityFragment extends Fragment {
 
     private ArrayAdapter<String> mGroupAdapter;
+    private List<String> groupArray = new ArrayList<String>();
 
     public MainActivityFragment() {
     }
@@ -29,23 +35,35 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        Firebase ref = new Firebase("https://csm117-brainstorm.firebaseio.com/");
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        String[] groupArray = {
-                "Group 1",
-                "Group 2",
-                "Group 3"
-        };
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    if (postSnapshot.getKey().equals("groups")) {
+                        for (DataSnapshot postpostSnapshot: postSnapshot.getChildren()){
+                            groupArray.add(postpostSnapshot.getKey());
+                            //System.out.println(postpostSnapshot.getKey());
+                        }
+                    }
+                }
 
-        List<String> listGroup = new ArrayList<String>(
-                Arrays.asList(groupArray));
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });
 
         mGroupAdapter =
                 new ArrayAdapter<String>(
                         getActivity(),
                         R.layout.list_item_group,
                         R.id.list_item_group_textview,
-                        listGroup);
+                        groupArray);
 
         ListView listView = (ListView) rootView.findViewById(
                 R.id.listview_group);
