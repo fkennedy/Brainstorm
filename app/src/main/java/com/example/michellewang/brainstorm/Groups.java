@@ -16,6 +16,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,8 +29,17 @@ import java.util.Map;
  * // * Created by Victor on 3/5/2016.
  * //
  */
+/*
+1) SET TIMER TO START NEW ACTIVITY
+2) FIX TIMER NOT SHOWING RIGHT NUMBER
+*/
+/**
+ * // * Created by Victor on 3/5/2016.
+ * //
+ */
 public class Groups extends AppCompatActivity {
     EditText group_text, group_name;
+    String groupName;
     LinearLayout member_list;
     SearchView member_search;
     ArrayList<String> AllUsers = new ArrayList<>();
@@ -37,11 +47,10 @@ public class Groups extends AppCompatActivity {
     CheckBox[] cbArray = new CheckBox[20];
     int cbArray_size = 0;
 
-    public final static String member_key = "com.example.michellewang.brainstorm.member_key";
-    public final static String group_key = "com.example.michellewang.brainstorm.group_key";
-    public final static String groupName_key = "com.example.michellewang.brainstorm.group_key";
+    public final static String groupName_key = "com.example.jonathancheung.firstapp.group_key";
+    public final static String UserMap_key = "com.example.jonathancheung.firstapp.map_key";
 
-    private String username = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +61,6 @@ public class Groups extends AppCompatActivity {
         group_name = (EditText) findViewById(R.id.group_text);
         member_list=(LinearLayout) findViewById(R.id.groupLayout);
         member_search=(SearchView) findViewById(R.id.member_search);
-
-        Bundle extras = getIntent().getExtras();
-        username = extras.getString("username");
 
         final Firebase UsernameList = ref.child("users");
         UsernameList.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -78,12 +84,12 @@ public class Groups extends AppCompatActivity {
         createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String groupName = group_name.getText().toString();
+                groupName = group_name.getText().toString();
                 if (groupName.length() == 0) {
                     group_name.setError("invalid group name");
                 }
                 else {
-                    Firebase groupRef = ref.child("groups").child(groupName);
+                    Firebase GroupRef = ref.child("groups").child(groupName).child("users");
                     Firebase UserRef;
                     Map<String, Boolean> selectedUserMap = new HashMap<>();
                     for (int i = 0; i < cbArray_size; i++)
@@ -97,29 +103,14 @@ public class Groups extends AppCompatActivity {
                     }
                     //PUSH USER WHO MADE GROUP INTO USERMAP
                     //UPDATE USER WHO MADE GROUP
-                    groupRef.setValue(selectedUserMap);
-
+                    GroupRef.setValue(selectedUserMap);
                     Intent newGroup = new Intent(Groups.this, New_Session.class);
+                    newGroup.putExtra(UserMap_key, (Serializable) selectedUserMap);
                     newGroup.putExtra(groupName_key, groupName);
-                    newGroup.putExtra("username", username);
                     startActivity(newGroup);
                 }
             }
         });
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                Intent intent= new Intent(Groups.this, MainActivity.class);
-                intent.putExtra("username", username);
-                startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     public void createUserCB()
@@ -136,5 +127,7 @@ public class Groups extends AppCompatActivity {
             groupLayout.addView(tempCB);
             cbArray_size++;
         }
+
     }
+
 }

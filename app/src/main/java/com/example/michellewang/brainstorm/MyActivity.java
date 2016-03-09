@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class MyActivity extends AppCompatActivity {
     public final static String EXTRA_MESSAGE = "com.example.michellewang.brainstorm.MESSAGE";
-    public final static String groupName_key = "com.example.michellewang.brainstorm.group_key";
+    public final static String groupName_key = "com.example.jonathancheung.firstapp.group_key";
     public int selectedMax = 3;
     public int selected = 0;
     private Map<String, Long> votes = new HashMap<String, Long>();
@@ -50,7 +50,9 @@ public class MyActivity extends AppCompatActivity {
         Firebase groupRef = ref.child("Brainstorms");
 
         Bundle extras = getIntent().getExtras();
-        groupName = extras.getString(groupName_key);
+        Intent intent = getIntent();
+        groupName = intent.getStringExtra(groupName_key);
+
         username = extras.getString("username");
 
 

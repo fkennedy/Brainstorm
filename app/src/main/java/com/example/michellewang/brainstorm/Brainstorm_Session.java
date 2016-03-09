@@ -11,7 +11,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,10 +23,10 @@ import java.util.Map;
 
 public class Brainstorm_Session extends AppCompatActivity {
 
-    public final static String timer_key = "com.example.michellewang.brainstorm.timer_key"; //MUST BE UNIQUE!
-    public final static String topic_key = "com.example.michellewang.brainstorm.topic_key";
-    public final static String spec_key = "com.example.michellewang.brainstorm.spec_key";
-    public final static String groupName_key = "com.example.michellewang.brainstorm.group_key";
+    public final static String timer_key = "com.example.jonathancheung.firstapp.timer_key"; //MUST BE UNIQUE!
+    public final static String topic_key = "com.example.jonathancheung.firstapp.topic_key";
+    public final static String spec_key = "com.example.jonathancheung.firstapp.spec_key";
+    public final static String groupName_key = "com.example.jonathancheung.firstapp.group_key";
 
     TextView textViewTime;
     TextView textViewTopic;
@@ -32,11 +35,11 @@ public class Brainstorm_Session extends AppCompatActivity {
     private ArrayAdapter<String>  BrainAdapter;
     private EditText txtInput;
     Map<String, Long> Ideas = new HashMap<>();
+    Map<String, Boolean> UpdatedIdeas = new HashMap<>();
+    String GroupName;
+
     //Timer
-    private String groupName = null; //MUST SET THIS
-    private String username = null;
     private MalibuCountDownTimer countDownTimer;
-    private long timeElapsed;
     private  long startTime = 10000 ;
     private final long interval = 1;
     int hours;
@@ -48,17 +51,15 @@ public class Brainstorm_Session extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_brainstorm__session);
         Firebase.setAndroidContext(this);
-        final Firebase ref = new Firebase("https://csm117-brainstorm.firebaseio.com/");
 
-        Bundle extras = getIntent().getExtras();
-        groupName = extras.getString(groupName_key);
-        username = extras.getString("username");
-
-        //Get the timer value from the previous activity
+        //Get all necessary values from the previous activity
         Intent submit = getIntent();
         String timer_value = submit.getStringExtra(timer_key);
         final String topic_value = submit.getStringExtra(topic_key);
         final String spec_value = submit.getStringExtra(spec_key);
+        GroupName = submit.getStringExtra(groupName_key);
+        final Firebase ref = new Firebase("https://csm117-brainstorm.firebaseio.com/").child("Brainstorms").child(GroupName).child("CurrentIdeas");
+
 
         //set Topic/Spec string in Brainstorm Session
         textViewTopic = (TextView) findViewById(R.id.header_topic);
@@ -69,18 +70,18 @@ public class Brainstorm_Session extends AppCompatActivity {
         //create the timer
         textViewTime = (TextView) findViewById(R.id.timer_text_view);
         int countdownTime = Integer.valueOf(timer_value);
-        hours = countdownTime / 3600;
-        minutes = (countdownTime % 3600) / 60;
-        seconds = countdownTime - hours * 3600 - minutes * 60;
+        hours = countdownTime/3600;
+        minutes = (countdownTime%3600)/60;
+        seconds = countdownTime - hours*3600 - minutes*60;
         String FormattedTime = String.valueOf(hours) + ':' + String.valueOf(minutes) + ':' + String.valueOf(seconds);
-        startTime = countdownTime * 1000;
+        startTime = countdownTime*1000;
         textViewTime.setText(FormattedTime);
 
         //create brainstorm item list
         ListView IdeaList = (ListView) findViewById(R.id.current_idealist);
-        String[] items = {};
+        String [] items= {};
         BrainstormList = new ArrayList<>(Arrays.asList(items));
-        BrainAdapter = new ArrayAdapter<>(this, R.layout.brainstorm_list_item, R.id.brainstorm_item, BrainstormList);
+        BrainAdapter = new ArrayAdapter<>(this,R.layout.brainstorm_list_item, R.id.brainstorm_item, BrainstormList);
         IdeaList.setAdapter(BrainAdapter);
 
         txtInput = (EditText) findViewById(R.id.addIdea_EditText);
@@ -93,11 +94,30 @@ public class Brainstorm_Session extends AppCompatActivity {
                     txtInput.setError("Please enter a valid idea!");
                 } else {
                     Ideas.put(NewItem, (long) 0);
-                    ref.child("Brainstorms").child(groupName).child("CurrentIdeas").setValue(Ideas);
+                    ref.setValue(Ideas);
                     BrainstormList.add(NewItem);
                     BrainAdapter.notifyDataSetChanged();
                     txtInput.setText("");
                 }
+            }
+        });
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                UpdatedIdeas = (HashMap<String, Boolean>) dataSnapshot.getValue();
+                if (UpdatedIdeas != null) {
+                    for (String NewIdea : UpdatedIdeas.keySet()) {
+                        if (!BrainstormList.contains(NewIdea))
+                            BrainstormList.add(NewIdea);
+                    }
+                    BrainAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
             }
         });
 
@@ -118,17 +138,14 @@ public class Brainstorm_Session extends AppCompatActivity {
         @Override
         public void onFinish()
         {
-            System.out.println("Reached intent creation");
-            Intent myIntent = new Intent(Brainstorm_Session.this, MyActivity.class); //CHANGE THIS
-            myIntent.putExtra(groupName_key, groupName);
-            myIntent.putExtra("username", username);
+            Intent myIntent = new Intent(Brainstorm_Session.this, MyActivity.class);
+            myIntent.putExtra(groupName_key,GroupName);
             startActivity(myIntent);
         }
 
         @Override
         public void onTick(long millisUntilFinished)
         {
-            timeElapsed = startTime - millisUntilFinished;
             //FORMAT EVERYTHING
             long new_hours = millisUntilFinished/3600000;
             long new_minutes = (millisUntilFinished%3600000)/60000;
