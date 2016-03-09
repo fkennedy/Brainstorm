@@ -9,7 +9,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.firebase.client.Firebase;
@@ -21,10 +20,11 @@ public class New_Session extends AppCompatActivity {
 
     EditText topic_text, spec_text,timer_text;
     public String GroupName;
+    public String username;
     public final static String timer_key = "com.example.jonathancheung.firstapp.timer_key"; //MUST BE UNIQUE!
     public final static String topic_key = "com.example.jonathancheung.firstapp.topic_key";
     public final static String spec_key = "com.example.jonathancheung.firstapp.spec_key";
-    public final static String groupName_key = "com.example.jonathancheung.firstapp.group_key";
+    public final static String groupName_key = "com.example.michellewang.brainstorm.group_key";
     public final static String UserMap_key = "com.example.jonathancheung.firstapp.map_key";
     Map <String, Boolean> UsersToUpdate;
 
@@ -34,6 +34,7 @@ public class New_Session extends AppCompatActivity {
         setContentView(R.layout.activity_new__session);
         Intent previous = getIntent();
         GroupName = previous.getStringExtra(groupName_key);
+        username = previous.getStringExtra("username");
         UsersToUpdate = (Map <String, Boolean>) previous.getSerializableExtra(UserMap_key);
         Firebase.setAndroidContext(this);
         final Firebase database = new Firebase("https://csm117-brainstorm.firebaseio.com/");
@@ -57,6 +58,7 @@ public class New_Session extends AppCompatActivity {
                 submit.putExtra(topic_key, topic);
                 submit.putExtra(spec_key, spec);
                 submit.putExtra(groupName_key, GroupName);
+                submit.putExtra("username", username);
 
                 //add the specs for the brain-session into each user's group node
                 Map<String, String> Details = new HashMap<>();

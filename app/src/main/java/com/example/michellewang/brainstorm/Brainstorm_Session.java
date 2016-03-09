@@ -29,7 +29,7 @@ public class Brainstorm_Session extends AppCompatActivity {
     public final static String timer_key = "com.example.jonathancheung.firstapp.timer_key"; //MUST BE UNIQUE!
     public final static String topic_key = "com.example.jonathancheung.firstapp.topic_key";
     public final static String spec_key = "com.example.jonathancheung.firstapp.spec_key";
-    public final static String groupName_key = "com.example.jonathancheung.firstapp.group_key";
+    public final static String groupName_key = "com.example.michellewang.brainstorm.group_key";
 
     TextView textViewTime;
     TextView textViewTopic;
@@ -40,6 +40,7 @@ public class Brainstorm_Session extends AppCompatActivity {
     Map<String, Long> Ideas = new HashMap<>();
     Map<String, Boolean> UpdatedIdeas = new HashMap<>();
     String GroupName;
+    String username;
 
     //Timer
     private MalibuCountDownTimer countDownTimer;
@@ -61,6 +62,7 @@ public class Brainstorm_Session extends AppCompatActivity {
         final String topic_value = submit.getStringExtra(topic_key);
         final String spec_value = submit.getStringExtra(spec_key);
         GroupName = submit.getStringExtra(groupName_key);
+        username = submit.getStringExtra("username");
         final Firebase ref = new Firebase("https://csm117-brainstorm.firebaseio.com/").child("Brainstorms").child(GroupName).child("CurrentIdeas");
 
 
@@ -157,6 +159,7 @@ public class Brainstorm_Session extends AppCompatActivity {
         {
             Intent myIntent = new Intent(Brainstorm_Session.this, MyActivity.class);
             myIntent.putExtra(groupName_key,GroupName);
+            myIntent.putExtra("username", username);
             startActivity(myIntent);
         }
 

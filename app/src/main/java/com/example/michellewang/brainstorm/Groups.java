@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -44,6 +43,7 @@ import java.util.Map;
 public class Groups extends AppCompatActivity {
     EditText group_text, group_name;
     String groupName;
+    String username;
     LinearLayout member_list;
     SearchView member_search;
     ArrayList<String> AllUsers = new ArrayList<>();
@@ -82,6 +82,8 @@ public class Groups extends AppCompatActivity {
             }
         });
 
+        Bundle extras = getIntent().getExtras();
+        username = extras.getString("username");
 
         //go to new activity and create a new group object
         Button createGroup = (Button) findViewById(R.id.create_group);
@@ -111,6 +113,7 @@ public class Groups extends AppCompatActivity {
                     Intent newGroup = new Intent(Groups.this, New_Session.class);
                     newGroup.putExtra(UserMap_key, (Serializable) selectedUserMap);
                     newGroup.putExtra(groupName_key, groupName);
+                    newGroup.putExtra("username", username);
                     startActivity(newGroup);
                 }
             }

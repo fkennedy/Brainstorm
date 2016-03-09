@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Firebase.setAndroidContext(this);
 
         Bundle extras = getIntent().getExtras();
         final String username = extras.getString("username");

@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class MyActivity extends AppCompatActivity {
     public final static String EXTRA_MESSAGE = "com.example.michellewang.brainstorm.MESSAGE";
-    public final static String groupName_key = "com.example.jonathancheung.firstapp.group_key";
+    public final static String groupName_key = "com.example.michellewang.brainstorm.group_key";
     public int selectedMax = 3;
     public int selected = 0;
     private Map<String, Long> votes = new HashMap<String, Long>();
@@ -156,10 +156,13 @@ public class MyActivity extends AppCompatActivity {
         //sv.addView(optionsLayout);
         LinearLayout optionsLayout = (LinearLayout)findViewById(R.id.optionsLayout);
 
+        Typeface tf1 = Typeface.createFromAsset(getAssets(), "fonts/FiraSans-Regular.ttf");
         for (HashMap.Entry<String, Long> entry : votes.entrySet())
         {
             cbArray[cbArray_size] = new CheckBox(this);
             cbArray[cbArray_size].setText(entry.getKey());
+            cbArray[cbArray_size].setTypeface(tf1);
+            cbArray[cbArray_size].setTextSize(16);
             int cbID = View.generateViewId();
             cbArray[cbArray_size].setId(cbID);
             cbArray[cbArray_size].setOnClickListener(cbListener);
@@ -171,12 +174,13 @@ public class MyActivity extends AppCompatActivity {
 
         TextView selectionsDisplay = (TextView)findViewById(R.id.selectionsDisplay);
         StringBuilder selectMsgBuilder = new StringBuilder(30);
-        selectMsgBuilder.append("Select up to ");
-        //selectMsgBuilder.append(String.valueOf(cbArray_size));
-        selectMsgBuilder.append("3 values: ");
+        selectMsgBuilder.append("Please pick your top 3 choices: ");
         String selectMsg = selectMsgBuilder.toString();
+        Typeface tf2 = Typeface.createFromAsset(getAssets(), "fonts/ChampagneLimousines.ttf");
+        selectionsDisplay.setTypeface(tf2);
+        selectionsDisplay.setGravity(Gravity.CENTER_VERTICAL);
         selectionsDisplay.setText(selectMsg);
-        selectionsDisplay.setTextSize(30);
+        selectionsDisplay.setTextSize(24);
         selectionsDisplay.setBottom(5);
 
 

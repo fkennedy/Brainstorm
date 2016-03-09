@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.firebase.client.Firebase;
+
 public class DetailActivity extends AppCompatActivity {
 
     private String groupName = null;
@@ -20,7 +22,7 @@ public class DetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        Firebase.setAndroidContext(this);
         Bundle extras = getIntent().getExtras();
         mUsername = extras.getString("username");
         groupName = extras.getString(groupName_key);
