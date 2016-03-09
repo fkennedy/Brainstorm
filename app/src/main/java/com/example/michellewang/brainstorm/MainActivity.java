@@ -17,12 +17,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     Firebase ref = new Firebase("https://csm117-brainstorm.firebaseio.com/");
+    public final static String groupName_key = "com.example.michellewang.brainstorm.group_key";
+
 
     NavigationView navigationView = null;
     Toolbar toolbar = null;
@@ -85,6 +93,30 @@ public class MainActivity extends AppCompatActivity
         abar.setCustomView(viewActionBar, params);
         abar.setDisplayShowCustomEnabled(true);
         abar.setDisplayShowTitleEnabled(false);
+
+        //Firebase ideaRef = ref.child("test1");
+        ref = new Firebase("https://csm117-brainstorm.firebaseio.com/");
+        Firebase usersRef = ref.child("users").child(username);
+
+        usersRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    //System.out.println(postSnapshot.getKey());
+                    Map<String, String> specMap = new HashMap<String, String>();
+                    if (specMap.get("Active") == "1") {
+                        Intent intent = new Intent(MainActivity.this, Brainstorm_Session.class);
+                        intent.putExtra(groupName_key, snapshot.getKey());
+                        startActivity(intent);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });
     }
 
     @Override

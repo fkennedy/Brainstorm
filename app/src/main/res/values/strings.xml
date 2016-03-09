@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">brainblast</string>
     <string name="menu1">Group Chats</string>
-    <string name="menu2">Friend\'s List</string>
+    <string name="menu2">Friends List</string>
     <string name="menu3">Settings</string>
     <string name="menu4">Profile</string>
     <string name="action_logout">Logout</string>
