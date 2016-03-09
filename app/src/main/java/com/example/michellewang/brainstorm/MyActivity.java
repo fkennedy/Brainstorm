@@ -2,10 +2,13 @@ package com.example.michellewang.brainstorm;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -106,6 +109,20 @@ public class MyActivity extends AppCompatActivity {
 
         countDownTimer = new MalibuCountDownTimer(startTime, interval);
         countDownTimer.start();
+
+        final ActionBar abar = getSupportActionBar();
+        View viewActionBar = getLayoutInflater().inflate(R.layout.app_bar_main_layout, null);
+        ActionBar.LayoutParams params = new ActionBar.LayoutParams(//Center the textview in the ActionBar !
+                ActionBar.LayoutParams.WRAP_CONTENT,
+                ActionBar.LayoutParams.MATCH_PARENT,
+                Gravity.CENTER);
+        TextView textviewTitle = (TextView) viewActionBar.findViewById(R.id.actionbar_textview);
+        textviewTitle.setText("brainblast");
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/antipasto.regular.otf");
+        textviewTitle.setTypeface(tf);
+        abar.setCustomView(viewActionBar, params);
+        abar.setDisplayShowCustomEnabled(true);
+        abar.setDisplayShowTitleEnabled(false);
     }
 
     @Override
@@ -155,8 +172,8 @@ public class MyActivity extends AppCompatActivity {
         TextView selectionsDisplay = (TextView)findViewById(R.id.selectionsDisplay);
         StringBuilder selectMsgBuilder = new StringBuilder(30);
         selectMsgBuilder.append("Select up to ");
-        selectMsgBuilder.append(String.valueOf(cbArray_size));
-        selectMsgBuilder.append(" values: ");
+        //selectMsgBuilder.append(String.valueOf(cbArray_size));
+        selectMsgBuilder.append("3 values: ");
         String selectMsg = selectMsgBuilder.toString();
         selectionsDisplay.setText(selectMsg);
         selectionsDisplay.setTextSize(30);

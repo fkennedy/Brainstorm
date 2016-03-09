@@ -1,12 +1,16 @@
 package com.example.michellewang.brainstorm;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -38,6 +42,20 @@ public class DetailActivity extends AppCompatActivity {
                 startActivity(newBrainstorm);
             }
         });
+
+        final ActionBar abar = getSupportActionBar();
+        View viewActionBar = getLayoutInflater().inflate(R.layout.app_bar_main_layout, null);
+        ActionBar.LayoutParams params = new ActionBar.LayoutParams(//Center the textview in the ActionBar !
+                ActionBar.LayoutParams.WRAP_CONTENT,
+                ActionBar.LayoutParams.MATCH_PARENT,
+                Gravity.CENTER);
+        TextView textviewTitle = (TextView) viewActionBar.findViewById(R.id.actionbar_textview);
+        textviewTitle.setText("brainblast");
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/antipasto.regular.otf");
+        textviewTitle.setTypeface(tf);
+        abar.setCustomView(viewActionBar, params);
+        abar.setDisplayShowCustomEnabled(true);
+        abar.setDisplayShowTitleEnabled(false);
     }
 
     @Override
