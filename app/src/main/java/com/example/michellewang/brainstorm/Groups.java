@@ -51,10 +51,8 @@ public class Groups extends AppCompatActivity {
     CheckBox[] cbArray = new CheckBox[20];
     int cbArray_size = 0;
 
-    public final static String groupName_key = "com.example.jonathancheung.firstapp.group_key";
+    public final static String groupName_key = "com.example.michellewang.brainstorm.group_key";
     public final static String UserMap_key = "com.example.jonathancheung.firstapp.map_key";
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +146,6 @@ public class Groups extends AppCompatActivity {
             groupLayout.addView(tempCB);
             cbArray_size++;
         }
-
     }
 
 }

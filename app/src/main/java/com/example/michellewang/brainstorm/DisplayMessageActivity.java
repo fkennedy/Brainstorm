@@ -2,6 +2,7 @@ package com.example.michellewang.brainstorm;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
@@ -9,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
@@ -50,8 +51,6 @@ public class DisplayMessageActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
         groupRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -105,6 +104,18 @@ public class DisplayMessageActivity extends AppCompatActivity {
         abar.setDisplayShowCustomEnabled(true);
         abar.setDisplayShowTitleEnabled(false);
 
+        final ImageView animImageView = (ImageView) findViewById(R.id.ivAnimation);
+        animImageView.setBackgroundResource(R.drawable.animate_idea_bulb);
+        animImageView.post(new Runnable() {
+            @Override
+            public void run() {
+                AnimationDrawable frameAnimation =
+                        (AnimationDrawable) animImageView.getBackground();
+                frameAnimation.start();
+            }
+        });
+
+
         /*
         for (HashMap.Entry<String, Integer> entry : sortedMap.entrySet())
         {
@@ -129,25 +140,24 @@ public class DisplayMessageActivity extends AppCompatActivity {
         int itemCounter = 0;
         StringBuilder s = new StringBuilder(100);
         String currHighest = "";
-        for (int i = 0; i < limit; i++)
-        {
+//        for (int i = 0; i < limit; i++)
+//        {
             currHighest = findHighestVoted(map);
             System.out.println(currHighest);
             map.remove(currHighest);
             s.append(currHighest);
             s.append("\n");
-        }
+//        }
 
         Intent intent = getIntent();
         String message = intent.getStringExtra(MyActivity.EXTRA_MESSAGE);
         String newMessage = s.toString();
 //        System.out.println(newMessage);
-        TextView textView = new TextView(this);
-        textView.setTextSize(40);
+        TextView textView = (TextView) findViewById(R.id.top_result);
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/KOMIKAX.ttf");
+        textView.setTypeface(tf);
+        textView.setTextSize(48);
         textView.setText(newMessage);
-
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.content);
-        layout.addView(textView);
     }
 
 

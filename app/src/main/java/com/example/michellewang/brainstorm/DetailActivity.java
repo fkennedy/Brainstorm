@@ -10,19 +10,29 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.firebase.client.Firebase;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DetailActivity extends AppCompatActivity {
 
     private String groupName = null;
     private String mUsername = null;
     public final static String groupName_key = "com.example.michellewang.brainstorm.group_key";
+    public final static String UserMap_key = "com.example.jonathancheung.firstapp.map_key";
+    CheckBox[] cbArray = new CheckBox[20];
+    int cbArray_size = 0;
+    Map<String, Boolean> userMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Firebase.setAndroidContext(this);
+        final Firebase ref = new Firebase("https://csm117-brainstorm.firebaseio.com/");
         Bundle extras = getIntent().getExtras();
         mUsername = extras.getString("username");
         groupName = extras.getString(groupName_key);
@@ -34,6 +44,22 @@ public class DetailActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Firebase GroupRef = ref.child("groups").child(groupName).child("users");
+        Firebase UserRef;
+        final Map<String, Boolean> selectedUserMap = new HashMap<>();
+        for (int i = 0; i < cbArray_size; i++)
+        {
+            if (cbArray[i].isChecked())
+            {
+                selectedUserMap.put(cbArray[i].getText().toString(), Boolean.TRUE);
+                UserRef = ref.child("users").child(cbArray[i].getText().toString());
+                UserRef.child(groupName).setValue("none");
+            }
+        }
+        //PUSH USER WHO MADE GROUP INTO USERMAP
+        //UPDATE USER WHO MADE GROUP
+        GroupRef.setValue(selectedUserMap);
+
         Button createGroup = (Button) findViewById(R.id.create_brainstorm);
         createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,6 +67,7 @@ public class DetailActivity extends AppCompatActivity {
                 Intent newBrainstorm = new Intent(DetailActivity.this, New_Session.class);
                 newBrainstorm.putExtra(groupName_key, groupName);
                 newBrainstorm.putExtra("username", mUsername);
+                newBrainstorm.putExtra(UserMap_key, (Serializable) selectedUserMap);
                 startActivity(newBrainstorm);
             }
         });
@@ -72,8 +99,12 @@ public class DetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    public String getUsername() {
-//        return mUsername;
-//    }
+    public void createUserCB()
+    {
+        for (HashMap.Entry<String, Boolean> entry : userMap.entrySet())
+        {
+            cbArray_size++;
+        }
+    }
 
 }
