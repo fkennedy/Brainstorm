@@ -69,7 +69,7 @@ public class New_Session extends AppCompatActivity {
 
                 for (String user : UsersToUpdate.keySet()) {
                     database.child("users").child(user).child(GroupName).setValue(Details);
-                    database.child("users").child(user).child(GroupName).child("Active").setValue(1);
+                    database.child("users").child(user).child(GroupName).child("Active").setValue("1");
                 }
                 startActivity(submit);
             }

@@ -62,7 +62,8 @@ public class Groups extends AppCompatActivity {
         final Firebase ref = new Firebase("https://csm117-brainstorm.firebaseio.com/");
         group_name = (EditText) findViewById(R.id.group_text);
         member_list=(LinearLayout) findViewById(R.id.groupLayout);
-        member_search=(SearchView) findViewById(R.id.member_search);
+//        member_search=(SearchView) findViewById(R.id.member_search);
+
 
         final Firebase UsernameList = ref.child("users");
         UsernameList.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -105,6 +106,9 @@ public class Groups extends AppCompatActivity {
                             UserRef.child(groupName).setValue("none");
                         }
                     }
+                    UserRef = ref.child("users");
+                    UserRef.child(username).child(groupName).setValue("none");
+                    selectedUserMap.put(username, Boolean.TRUE);
                     //PUSH USER WHO MADE GROUP INTO USERMAP
                     //UPDATE USER WHO MADE GROUP
                     GroupRef.setValue(selectedUserMap);
@@ -138,13 +142,16 @@ public class Groups extends AppCompatActivity {
         groupLayout.setOrientation(LinearLayout.VERTICAL);
         for (HashMap.Entry<String, Boolean> entry : userMap.entrySet())
         {
-            cbArray[cbArray_size] = new CheckBox(this);
-            CheckBox tempCB = cbArray[cbArray_size];
-            tempCB.setText(entry.getKey());
-            int cbID = View.generateViewId();
-            tempCB.setId(cbID);
-            groupLayout.addView(tempCB);
-            cbArray_size++;
+            if (entry.getKey() != username)
+            {
+                cbArray[cbArray_size] = new CheckBox(this);
+                CheckBox tempCB = cbArray[cbArray_size];
+                tempCB.setText(entry.getKey());
+                int cbID = View.generateViewId();
+                tempCB.setId(cbID);
+                groupLayout.addView(tempCB);
+                cbArray_size++;
+            }
         }
     }
 

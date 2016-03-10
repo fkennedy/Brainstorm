@@ -38,7 +38,7 @@ public class Brainstorm_Session extends AppCompatActivity {
     private ArrayAdapter<String>  BrainAdapter;
     private EditText txtInput;
     Map<String, Long> Ideas = new HashMap<>();
-    Map<String, Boolean> UpdatedIdeas = new HashMap<>();
+    Map<String, Long> UpdatedIdeas = new HashMap<>();
     String GroupName;
     String username;
 
@@ -99,7 +99,8 @@ public class Brainstorm_Session extends AppCompatActivity {
                     txtInput.setError("Please enter a valid idea!");
                 } else {
                     Ideas.put(NewItem, (long) 0);
-                    ref.setValue(Ideas);
+                    Map tempMap = Ideas;
+                    ref.updateChildren(tempMap);
                     BrainstormList.add(NewItem);
                     BrainAdapter.notifyDataSetChanged();
                     txtInput.setText("");
@@ -110,7 +111,7 @@ public class Brainstorm_Session extends AppCompatActivity {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                UpdatedIdeas = (HashMap<String, Boolean>) dataSnapshot.getValue();
+                UpdatedIdeas = (HashMap<String, Long>) dataSnapshot.getValue();
                 if (UpdatedIdeas != null) {
                     for (String NewIdea : UpdatedIdeas.keySet()) {
                         if (!BrainstormList.contains(NewIdea))

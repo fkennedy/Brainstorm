@@ -37,7 +37,7 @@ public class MyActivity extends AppCompatActivity {
     boolean mapInit_flag = false;
     private MalibuCountDownTimer countDownTimer;
     private long timeElapsed;
-    private final long startTime = 10000;
+    private final long startTime = 15000;
     private final long interval = 1;
     private String groupName = null; // PASSED FROM CHEUNG'S
     private String username = null; // PASSED FROM CHEUNG'S

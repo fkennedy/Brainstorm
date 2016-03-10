@@ -30,6 +30,9 @@ public class MainActivity extends AppCompatActivity
 
     Firebase ref = new Firebase("https://csm117-brainstorm.firebaseio.com/");
     public final static String groupName_key = "com.example.michellewang.brainstorm.group_key";
+    public final static String timer_key = "com.example.jonathancheung.firstapp.timer_key"; //MUST BE UNIQUE!
+    public final static String topic_key = "com.example.jonathancheung.firstapp.topic_key";
+    public final static String spec_key = "com.example.jonathancheung.firstapp.spec_key";
 
 
     NavigationView navigationView = null;
@@ -103,11 +106,22 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    //System.out.println(postSnapshot.getKey());
+                    if (postSnapshot.getValue().equals("none"))
+                        break;
+                    //System.out.println(postSnapshot.getValue());
                     Map<String, String> specMap = new HashMap<String, String>();
-                    if (specMap.get("Active") == "1") {
+                    specMap = (HashMap<String, String>)postSnapshot.getValue();
+                    System.out.println(specMap);
+                    if(!specMap.containsKey("Active"))
+                        break;
+                    if (specMap.get("Active").equals("1")) {
+                        System.out.println("User is now in an active brainstorm session");
                         Intent intent = new Intent(MainActivity.this, Brainstorm_Session.class);
-                        intent.putExtra(groupName_key, snapshot.getKey());
+                        intent.putExtra("username", username);
+                        intent.putExtra(spec_key, specMap.get("spec"));
+                        intent.putExtra(timer_key, specMap.get("timer"));
+                        intent.putExtra(topic_key, specMap.get("topic"));
+                        intent.putExtra(groupName_key, postSnapshot.getKey());
                         startActivity(intent);
                     }
                 }
